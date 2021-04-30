@@ -1,4 +1,4 @@
-###TIMING: 60 minutes so far
+###TIMING: 75 minutes so far
 import unittest
 
 class Node:
@@ -72,10 +72,17 @@ class linked_list:
             temp_head = temp_head.next
         print(values)
 
-    def isPalindrome(self):
+    #def isPalindrome(self):
 
     def hasCycle(self):
-
+        seen = set()
+        temp_head = self.head
+        for i in range(self.sizes):
+            if temp_head in seen:
+                return True
+            seen.add(temp_head)
+            temp_head = temp_head.next
+        return False
 
 
 class UnitTests(unittest.TestCase):
@@ -180,6 +187,27 @@ class UnitTests(unittest.TestCase):
         c = Node(5, None)
         link.push(c)
         self.assertEqual(link.size(),3)
+
+    def testHasCycle(self):
+        link = linked_list()
+        a = Node(9,None)
+        link.push(a)
+        b = Node(8, None)
+        link.push(b)
+        c = Node(5, None)
+        link.push(c)
+        self.assertEqual(link.elementAt(0).value,5)
+        self.assertEqual(link.elementAt(1).value,8)
+        self.assertEqual(link.elementAt(2).value,9)
+        self.assertEqual(link.elementAt(3),None)
+        self.assertFalse(link.hasCycle())
+        link.push(a)
+        # link.printList()
+        self.assertEqual(link.elementAt(0).value,9)
+        self.assertEqual(link.elementAt(1).value,5)
+        self.assertEqual(link.elementAt(2).value,8)
+        self.assertEqual(link.elementAt(3).value,9)
+        self.assertTrue(link.hasCycle())
 
 if __name__ == '__main__':
     unittest.main()
