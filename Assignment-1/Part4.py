@@ -1,14 +1,10 @@
-###TIMING: 75 minutes so far
+
 import unittest
 
 class Node:
     def __init__(self, value, next):
         self.value = value
         self.next = next
-    # def setNext(self, next):
-    #     self.next = next
-    # def setVal(self, val):
-    #     self.value = val
 
 class linked_list:
     def __init__(self):
@@ -72,7 +68,24 @@ class linked_list:
             temp_head = temp_head.next
         print(values)
 
-    #def isPalindrome(self):
+    def isPalindrome(self):
+        #thought process: reverse first half of list and then compare to the second half
+        temp_list = linked_list()
+        temp_head = self.head
+        for i in range(self.sizes//2):
+            temp_list.push(Node(temp_head.value,None))
+            temp_head = temp_head.next
+        first_head = temp_list.head
+        second_head = temp_head
+        if self.sizes % 2 == 1:
+            second_head = second_head.next
+        for i in range(self.sizes//2):
+            if (first_head is None) or (second_head is None):
+                return False
+            if first_head.value != second_head.value:
+                return False
+            first_head, second_head = first_head.next, second_head.next
+        return True
 
     def hasCycle(self):
         seen = set()
@@ -209,5 +222,32 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(link.elementAt(3).value,9)
         self.assertTrue(link.hasCycle())
 
+    def testPalindrome(self):
+        link = linked_list()
+        a = Node(9,None)
+        link.push(a)
+        b = Node(8, None)
+        link.push(b)
+        c = Node(5, None)
+        link.push(c)
+        self.assertEqual(link.elementAt(0).value,5)
+        self.assertEqual(link.elementAt(1).value,8)
+        self.assertEqual(link.elementAt(2).value,9)
+        self.assertEqual(link.elementAt(3),None)
+        d = Node(8, None)
+        link.push(d)
+        e = Node(9, None)
+        link.push(e)
+        self.assertEqual(link.elementAt(0).value,9)
+        self.assertEqual(link.elementAt(1).value,8)
+        self.assertEqual(link.elementAt(2).value,5)
+        self.assertEqual(link.elementAt(3).value,8)
+        self.assertEqual(link.elementAt(4).value,9)
+        self.assertEqual(link.elementAt(5),None)
+        self.assertTrue(link.isPalindrome())
+
 if __name__ == '__main__':
     unittest.main()
+
+###TIMING: 90 minutes for everything (including palindrome and test cases)
+##not sure if there is a better way to do palindrome
