@@ -3,15 +3,21 @@ import unittest
 class Stack:
     def __init__(self):
         self.list = []
+        self.minimum = float('inf')
 
     def push(self, num):
         self.list = [num] + self.list[:]
+        if type(num) == int and num < self.minimum:
+            self.minimum = num
 
     def pop(self):
         if self.isEmpty():
             return None
         value = self.list[0]
         self.list = self.list[1:]
+        if type(value) == int and value == self.minimum:
+            if len(self.list) != 0:
+                self.minimum = min(self.list)
         return value
 
     def top(self):
@@ -24,6 +30,9 @@ class Stack:
 
     def size(self):
         return len(self.list)
+
+    def min(self):
+        return self.minimum
 
 # made this into an actual unit test below
 #example test code given
@@ -150,6 +159,18 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(myStack.size(),1)
         self.assertEqual(myStack.pop(),'abc')
         self.assertEqual(myStack.pop(),None)
+
+    def testStackMin(self):
+        myStack = Stack()
+        myStack.push(42)
+        myStack.push(23)
+        myStack.push(53)
+        myStack.push(-3)
+        self.assertEqual(myStack.top(),-3)
+        self.assertEqual(myStack.size(),4)
+        self.assertEqual(myStack.min(),-3)
+        self.assertEqual(myStack.pop(),-3)
+        self.assertEqual(myStack.min(),23)
 
 #not sure what this does or if it is just syntax??
 if __name__ == '__main__':
