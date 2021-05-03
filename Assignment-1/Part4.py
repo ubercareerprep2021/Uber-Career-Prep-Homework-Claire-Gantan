@@ -105,13 +105,24 @@ class linked_list:
         return True
 
     def hasCycle(self):
-        seen = set()
-        temp_head = self.head
-        for i in range(self.sizes):
-            if temp_head in seen:
+        # first attempt during timed run: used hashset
+        # seen = set()
+        # temp_head = self.head
+        # for i in range(self.sizes):
+        #     if temp_head in seen:
+        #         return True
+        #     seen.add(temp_head)
+        #     temp_head = temp_head.next
+        # return False
+
+        #second attempt: using tortise & hare method
+        fast = self.head
+        slow = self.head
+        while (fast is not None) and (fast.next is not None):
+            fast = fast.next.next
+            slow = slow.next
+            if slow is fast:
                 return True
-            seen.add(temp_head)
-            temp_head = temp_head.next
         return False
 
 
