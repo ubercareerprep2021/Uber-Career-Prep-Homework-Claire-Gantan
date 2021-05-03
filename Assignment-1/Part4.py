@@ -69,22 +69,39 @@ class linked_list:
         print(values)
 
     def isPalindrome(self):
-        #thought process: reverse first half of list and then compare to the second half
-        temp_list = linked_list()
+        #thought process: reverse first half of list and then compare to the second half (using a new linked list)
+        # temp_list = linked_list()
+        # temp_head = self.head
+        # for i in range(self.sizes//2):
+        #     temp_list.push(Node(temp_head.value,None))
+        #     temp_head = temp_head.next
+        # first_head = temp_list.head
+        # second_head = temp_head
+        # if self.sizes % 2 == 1:
+        #     second_head = second_head.next
+        # for i in range(self.sizes//2):
+        #     if (first_head is None) or (second_head is None):
+        #         return False
+        #     if first_head.value != second_head.value:
+        #         return False
+        #     first_head, second_head = first_head.next, second_head.next
+        # return True
+
+        #second attempt with no new linked list
         temp_head = self.head
+        seen = ""
         for i in range(self.sizes//2):
-            temp_list.push(Node(temp_head.value,None))
+            seen = str(temp_head.value) + seen
             temp_head = temp_head.next
-        first_head = temp_list.head
-        second_head = temp_head
         if self.sizes % 2 == 1:
-            second_head = second_head.next
+            temp_head = temp_head.next
         for i in range(self.sizes//2):
-            if (first_head is None) or (second_head is None):
+            if temp_head is None:
                 return False
-            if first_head.value != second_head.value:
+            if int(seen[i]) != temp_head.value:
+                print(seen[i], temp_head.value)
                 return False
-            first_head, second_head = first_head.next, second_head.next
+            temp_head = temp_head.next
         return True
 
     def hasCycle(self):
