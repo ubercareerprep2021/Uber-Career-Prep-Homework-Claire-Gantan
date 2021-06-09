@@ -140,6 +140,7 @@ if __name__ == '__main__':
 #breadth_first_print = 9 min
 #levels = 6 min
 # reflection: was able to use a lot of recursion which was super helpful! I was not sure whether we were supposed to use the tree class given in the spec or not, but it was how I would have implemented it as well, so I just studied and retyped it.
+
 #extra practice: preorder, postorder and inorder prints (with test cases written first)
 #example tree from: https://www.google.com/url?sa=i&url=https%3A%2F%2Ftech.paayi.com%2Fpython-tree-data-structures&psig=AOvVaw0F6fGCiTTjtPLLNFFLUzXX&ust=1623184834967000&source=images&cd=vfe&ved=0CA0QjhxqFwoTCICyzvGwhvECFQAAAAAdAAAAABAI
 #TIMING: writing tests: 8 min, writing code: 13 min
