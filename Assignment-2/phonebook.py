@@ -1,4 +1,6 @@
 import unittest
+from csv import reader
+import time
 
 #adding bst coded in ex 4, edited to have key value pairs
 class tree_node:
@@ -21,13 +23,14 @@ class binary_search_tree:
                 if temp.right is None:
                     temp.right = tree_node(key, val, None, None)
                     return
+                # print("moved right for "+key)
                 temp = temp.right
             else:
                 if temp.left is None:
                     temp.left = tree_node(key, val, None, None)
                     return
-                temp = temp.right
-        temp = tree_node(key, None, None)
+                temp = temp.left
+        temp = tree_node(key, val, None, None)
 
     def find(self, key):
         temp = self.root
@@ -75,6 +78,7 @@ class bst_phone_book(phone_book):
         else:
             self.book.insert(name, number)
         self.len += 1
+
     def find(self, name):
         return self.book.find(name)
 
@@ -89,6 +93,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(book.size(),2)
         self.assertEqual(book.find("ABC"),111111111)
         self.assertEqual(book.find("DEF"), 222222222)
+
     def test_bst(self):
         book = bst_phone_book()
         book.insert("ABC",111111111)
@@ -100,9 +105,72 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(book.find("ABC"),111111111)
         self.assertEqual(book.find("DEF"), 222222222)
 
+    def test_big_phonebook_list(self):
+        book = list_phone_book()
+        with open("data.csv", "r") as read_obj:
+            txt = reader(read_obj)
+            start = time.time()
+            for line in txt:
+                book.insert(line[0],line[1])
+            end = time.time()
+        print("List Phonebook:")
+        print("Insert took "+str((end-start)*1000)+" milliseconds.")
+        print("The size of the phone book is "+str(book.size()))
+        # print('826f2b81-35a9-41b0-a679-0c43f3c0d859' in book.names)
+        with open("search.txt") as txt:
+            start = time.time()
+            count = 0
+            for line in txt:
+                count += 1
+                if book.find(line[:-1]) == -1: #[:-1] gets rid of the newline at the end of the readline
+                    raise SystemExit('Line not found')
+            end = time.time()
+        print("Find() was called "+str(count)+" times.")
+        print("Find took "+str((end-start)*1000)+" milliseconds.")
+        print()
+
+    def test_big_phonebook_bst(self):
+        temp_book = bst_phone_book()
+        with open("data.csv", "r") as read_obj:
+            txt = reader(read_obj)
+            start = time.time()
+            for line in txt:
+                temp_book.insert(line[0], line[1])
+            end = time.time()
+        print("BST Phonebook:")
+        print("Insert took "+str((end-start)*1000)+" milliseconds.")
+        print("The size of the phone book is "+str(temp_book.size()))
+        with open("search.txt") as txt:
+            start = time.time()
+            count = 0
+            for line in txt:
+                count += 1
+                if temp_book.find(line[:-1]) == -1: #[:-1] gets rid of the newline at the end of the readline
+                    print(line[:-1])
+                    raise SystemExit('Line not found')
+            end = time.time()
+        print("Find() was called "+str(count)+" times.")
+        print("Find took "+str((end-start)*1000)+" milliseconds.")
+        print()
+
+    def test_small_phonebook_bst(self):
+        temp_book = bst_phone_book()
+        temp_book.insert('1fours','456789123')
+        temp_book.insert('4ones', '123456789')
+        temp_book.insert('2twos', '234567891')
+        temp_book.insert('1threes','345678912')
+        temp_book.insert('rand-123', '012938475')
+        self.assertEqual(temp_book.find('4ones'),'123456789')
+        self.assertEqual(temp_book.find('2twos'),'234567891')
+        self.assertEqual(temp_book.find('1threes'),'345678912')
+        self.assertTrue(temp_book.find('rand-123'),'012938475')
+        self.assertEqual(temp_book.find('1fours'),'456789123')
 
 if __name__ == '__main__':
     unittest.main()
 
 
-#TIMING: ex 5: code writing: 7 min list AND 8 min bst, tests: 2 min
+#TIMING:
+#ex 5: code writing: 7 min list AND 8 min bst, tests: 2 min
+#ex 6: code writing:, tests: 1:29-1:55
+#needed to check how to read lines, error printing and time code in python

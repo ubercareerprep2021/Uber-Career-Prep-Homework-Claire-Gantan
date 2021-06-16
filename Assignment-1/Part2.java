@@ -12,7 +12,7 @@ public class Part2 {
    List<Integer> input = new ArrayList<Integer>();
    System.out.println(pairsThatEqualSum(input, 1));// == []
    input.add(4);
-   input.add(3);
+   input.add(-3);
    input.add(1);
    input.add(2);
    input.add(5);
@@ -32,7 +32,7 @@ public class Part2 {
   //count the number of times each letter shows up in the first String and check if the second String works as well
   public static boolean isStringPermutation(String s1, String s2) {
     // first attempt
-    // int[] counter = new int[26]; // wont work for all Strings (want to try Hash Map?)
+    // int[] counter = new int[26]; // wont work for all Strings (want to try Hash Map?) -- change length to 128
     // for (int i=0; i<s1.length(); i++){
     //   char c = s1.charAt(i);
     //   counter[c-'a']++;
@@ -47,10 +47,10 @@ public class Part2 {
     // }
     // return true;
     HashMap counter = new HashMap();
-    for (int i=0; i<s1.length(); i++){
+    for (int i = 0; i<s1.length(); i++){
       char c = s1.charAt(i);
       if (counter.containsKey(c)){
-        counter.put(c,(int)counter.get(c)+1);
+        counter.put(c,(int)counter.get(c) + 1);
       } else {
         counter.put(c,1);
       }
@@ -78,7 +78,7 @@ public class Part2 {
   //Outline: go through HALF of list and add tuple if rest of the list contains   targetSum -i for a list value i
   //ASSUMED doubles (i.e. counting (2,2) as a valid tuple for targetSum 4 if there is only one value of 2) are valid
   public static List<List<Integer>> pairsThatEqualSum(List<Integer> inputArray, Integer targetSum) {
-    List<List<Integer>> result = new ArrayList<List<Integer>>();
+    List<List<Integer>> result = new ArrayList<List<Integer>>();//HashMap values instead
     for (int i=0; i<inputArray.size(); i++){
       int num = inputArray.get(i);
       if (inputArray.indexOf(targetSum-num) >= i){

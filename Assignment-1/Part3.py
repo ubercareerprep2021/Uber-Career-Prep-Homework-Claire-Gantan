@@ -18,6 +18,8 @@ class Stack:
         if type(value) == int and value == self.minimum:
             if len(self.list) != 0:
                 self.minimum = min(self.list)
+            else:
+                self.minimum = None
         return value
 
     def top(self):
