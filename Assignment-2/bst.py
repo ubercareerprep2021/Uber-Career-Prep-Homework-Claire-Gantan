@@ -1,8 +1,6 @@
 import unittest
 
-#TIMING:
-#ex 4: tests: 5 min, writing code: 23 min
-#ex 5: tests:
+
 class tree_node:
     def __init__(self, data, left, right):
         self.data = data
@@ -18,6 +16,9 @@ class binary_search_tree:
     # @param key The key to insert.
     def insert(self, key):
         temp = self.root
+        if temp is None:
+            self.root = tree_node(key, None, None)
+            return
         while temp is not None:
             if temp.data == key:
                 return
@@ -30,8 +31,7 @@ class binary_search_tree:
                 if temp.left is None:
                     temp.left = tree_node(key, None, None)
                     return
-                temp = temp.right
-        print("attempting to insert")
+                temp = temp.left
         temp = tree_node(key, None, None)
 
     # Checks whether or not a key exists in this binary search tree.
@@ -76,7 +76,19 @@ class UnitTests(unittest.TestCase):
         self.assertTrue(test_tree.find(5))
         self.assertFalse(test_tree.find(3))
 
+    def test_empty(self):
+        empty_tree = binary_search_tree(None)
+        self.assertFalse(empty_tree.find(0))
+
+    def test_insert_into_empty(self):
+        empty_tree = binary_search_tree(None)
+        self.assertFalse(empty_tree.find(589))
+        empty_tree.insert(589)
+        self.assertTrue(empty_tree.find(589))
 
 
 if __name__ == '__main__':
     unittest.main()
+
+#TIMING:
+#ex 4: tests: 5 min, writing code: 23 min
