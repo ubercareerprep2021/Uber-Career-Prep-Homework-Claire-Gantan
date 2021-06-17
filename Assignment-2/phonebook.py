@@ -23,7 +23,6 @@ class binary_search_tree:
                 if temp.right is None:
                     temp.right = tree_node(key, val, None, None)
                     return
-                # print("moved right for "+key)
                 temp = temp.right
             else:
                 if temp.left is None:
@@ -80,10 +79,12 @@ class bst_phone_book(phone_book):
         self.len += 1
 
     def find(self, name):
+        if self.book is None:
+            return -1
         return self.book.find(name)
 
 class UnitTests(unittest.TestCase):
-    def test_list(self):
+    def test_short_list(self):
         book = list_phone_book()
         book.insert("ABC",111111111)
         self.assertEqual(book.size(),1)
@@ -94,7 +95,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(book.find("ABC"),111111111)
         self.assertEqual(book.find("DEF"), 222222222)
 
-    def test_bst(self):
+    def test_short_bst(self):
         book = bst_phone_book()
         book.insert("ABC",111111111)
         self.assertEqual(book.size(),1)
@@ -105,7 +106,29 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(book.find("ABC"),111111111)
         self.assertEqual(book.find("DEF"), 222222222)
 
-    def test_big_phonebook_list(self):
+    def test_empty_bst(self):
+        book = bst_phone_book()
+        self.assertEqual(book.find("DEF"), -1)
+
+    def test_empty_list(self):
+        book = list_phone_book()
+        self.assertEqual(book.find("DEF"), -1)
+
+    def test_same_vals_bst(self):
+        book = bst_phone_book()
+        book.insert("one",123)
+        book.insert("two",123)
+        self.assertEqual(book.find("one"), 123)
+        self.assertEqual(book.find("two"), 123)
+
+    def test_same_vals_list(self):
+        book = list_phone_book()
+        book.insert("one",123)
+        book.insert("two",123)
+        self.assertEqual(book.find("one"), 123)
+        self.assertEqual(book.find("two"), 123)
+
+    def test_big_list(self):
         book = list_phone_book()
         with open("data.csv", "r") as read_obj:
             txt = reader(read_obj)
@@ -116,7 +139,6 @@ class UnitTests(unittest.TestCase):
         print("List Phonebook:")
         print("Insert took "+str((end-start)*1000)+" milliseconds.")
         print("The size of the phone book is "+str(book.size()))
-        # print('826f2b81-35a9-41b0-a679-0c43f3c0d859' in book.names)
         with open("search.txt") as txt:
             start = time.time()
             count = 0
@@ -129,7 +151,7 @@ class UnitTests(unittest.TestCase):
         print("Find took "+str((end-start)*1000)+" milliseconds.")
         print()
 
-    def test_big_phonebook_bst(self):
+    def test_big_bst(self):
         temp_book = bst_phone_book()
         with open("data.csv", "r") as read_obj:
             txt = reader(read_obj)
@@ -153,7 +175,8 @@ class UnitTests(unittest.TestCase):
         print("Find took "+str((end-start)*1000)+" milliseconds.")
         print()
 
-    def test_small_phonebook_bst(self):
+    #recreating error found when using the text file to debug
+    def test_insert_bst(self):
         temp_book = bst_phone_book()
         temp_book.insert('1fours','456789123')
         temp_book.insert('4ones', '123456789')
