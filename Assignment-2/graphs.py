@@ -29,25 +29,27 @@ class graph_with_adjacency_list:
         if key in nodes:
             indx = nodes.index(key)
             for num in self.adj_nodes[indx][1]:
-                self.remove_edge(key, num)
+                self.remove_edge(key, num.data)
             self.adj_nodes.remove(self.adj_nodes[indx])
 
     def add_edge(self, one, two):
         nodes = [n[0].data for n in self.adj_nodes]
         if one in nodes and two in nodes:
-            self.adj_nodes[nodes.index(one)][1].append(two)
-            self.adj_nodes[nodes.index(two)][1].append(one)
+            self.adj_nodes[nodes.index(one)][1].append(self.adj_nodes[nodes.index(two)][0])
+            self.adj_nodes[nodes.index(two)][1].append(self.adj_nodes[nodes.index(one)][0])
 
     def remove_edge(self, one, two):
         nodes = [n[0].data for n in self.adj_nodes]
         if one in nodes and two in nodes:
-            self.adj_nodes[nodes.index(one)][1].remove(two)
-            self.adj_nodes[nodes.index(two)][1].remove(one)
+            one_node = self.adj_nodes[nodes.index(one)][0]
+            two_node = self.adj_nodes[nodes.index(two)][0]
+            self.adj_nodes[nodes.index(one)][1].remove(two_node)
+            self.adj_nodes[nodes.index(two)][1].remove(one_node)
 
     def get_adj_nodes(self, key):
         nodes = [n[0].data for n in self.adj_nodes]
         if key in nodes:
-            return self.adj_nodes[nodes.index(key)][1]
+            return [n.data for n in self.adj_nodes[nodes.index(key)][1]]
 
 
 class UnitTests(unittest.TestCase):
@@ -93,8 +95,8 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(three.adj_nodes[1][0].data, 2)
         self.assertEqual(three.adj_nodes[2][0].data, -3)
         three.add_edge(-1, -3)
-        self.assertEqual(three.adj_nodes[0][1],[-3])
-        self.assertEqual(three.adj_nodes[2][1],[-1])
+        self.assertEqual(three.get_adj_nodes(-1),[-3])
+        self.assertEqual(three.get_adj_nodes(-3),[-1])
 
     def test_add_edge_not_found(self):
         one = graph_with_adjacency_list([])
@@ -112,32 +114,14 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(three.adj_nodes[1][0].data, 2)
         self.assertEqual(three.adj_nodes[2][0].data, -3)
         three.add_edge(-1, -3)
-        self.assertEqual(three.adj_nodes[0][1],[-3])
-        self.assertEqual(three.adj_nodes[2][1],[-1])
+        self.assertEqual(three.get_adj_nodes(-1),[-3])
+        self.assertEqual(three.get_adj_nodes(-3),[-1])
         three.remove_node(2)
         three.remove_node(-1)
         self.assertEqual(three.adj_nodes[0][0].data, -3)
-        self.assertEqual(three.adj_nodes[0][1],[])
+        self.assertEqual(three.get_adj_nodes(-3),[])
 
     def test_remove_one_edge(self):
-        three = graph_with_adjacency_list([])
-        three.add_node(-1)
-        three.add_node(2)
-        three.add_node(-3)
-        self.assertEqual(three.adj_nodes[0][0].data, -1)
-        self.assertEqual(three.adj_nodes[1][0].data, 2)
-        self.assertEqual(three.adj_nodes[2][0].data, -3)
-        three.add_edge(-1, -3)
-        three.add_edge(-1, 2)
-        self.assertEqual(three.adj_nodes[0][1],[-3,2])
-        self.assertEqual(three.adj_nodes[1][1],[-1])
-        self.assertEqual(three.adj_nodes[2][1],[-1])
-        three.remove_edge(-1, 2)
-        self.assertEqual(three.adj_nodes[0][1],[-3])
-        self.assertEqual(three.adj_nodes[1][1],[])
-        self.assertEqual(three.adj_nodes[2][1],[-1])
-
-    def test_get_adj_nodes(self):
         three = graph_with_adjacency_list([])
         three.add_node(-1)
         three.add_node(2)
@@ -153,6 +137,24 @@ class UnitTests(unittest.TestCase):
         three.remove_edge(-1, 2)
         self.assertEqual(three.get_adj_nodes(-1),[-3])
         self.assertEqual(three.get_adj_nodes(2),[])
+        self.assertEqual(three.get_adj_nodes(-3),[-1])
+
+    def test_get_adj_nodes(self):
+        three = graph_with_adjacency_list([])
+        three.add_node(-1)
+        three.add_node(2)
+        three.add_node(-3)
+        self.assertEqual(three.adj_nodes[0][0].data, -1)
+        self.assertEqual(three.adj_nodes[1][0].data, 2)
+        self.assertEqual(three.adj_nodes[2][0].data, -3)
+        self.assertEqual(three.get_adj_nodes(-1),[])
+        self.assertEqual(three.get_adj_nodes(2),[])
+        self.assertEqual(three.get_adj_nodes(-3),[])
+        self.assertEqual(three.get_adj_nodes(4),None)
+        three.add_edge(-1, -3)
+        three.add_edge(-1, 2)
+        self.assertEqual(three.get_adj_nodes(-1),[-3,2])
+        self.assertEqual(three.get_adj_nodes(2),[-1])
         self.assertEqual(three.get_adj_nodes(-3),[-1])
 
 if __name__ == '__main__':
