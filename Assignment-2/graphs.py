@@ -118,6 +118,25 @@ class graph_with_adjacency_list:
             return res[1:]
         return ""
 
+    def min_number_of_edges(self, one, two):
+        seen = []
+        return self.min_number_of_edges_helper(one, two, seen)
+
+    def min_number_of_edges_helper(self, one, two, seen):
+        nodes = [n[0].data for n in self.adj_nodes]
+        if one not in nodes or two not in nodes:
+            return -1 #assumed return -1 if no way to get from node1 to node2
+        if one == two:
+            return 0
+        elif two in self.get_adj_nodes(one):
+            return 1
+        else:
+            seen.append(one)
+            possible = [self.min_number_of_edges_helper(n, two, seen) for n in self.get_adj_nodes(one) if n not in seen]
+            if len(possible) == 0 or max(possible) == -1:
+                return -1
+            return 1 + min([i for i in possible if i > -1])
+
 
 
 class UnitTests(unittest.TestCase):
@@ -279,10 +298,37 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(four.get_adj_nodes(-2),[4])
         self.assertEqual(four.bfs(-300),"-300 4 1 -2")
 
+    def test_min_edges(self):
+        graph = graph_with_adjacency_list([])
+        graph.add_node(0)
+        graph.add_node(1)
+        graph.add_node(2)
+        graph.add_node(3)
+        graph.add_node(4)
+        graph.add_node(5)
+        graph.add_node(6)
+        graph.add_edge(0, 1)
+        graph.add_edge(0, 2)
+        graph.add_edge(0, 4)
+        graph.add_edge(1,2)
+        graph.add_edge(3, 4)
+        graph.add_edge(4,5)
+        graph.add_edge(4,6)
+        graph.add_edge(2,5)
+        self.assertEqual(graph.get_adj_nodes(0),[1,2,4])
+        self.assertEqual(graph.get_adj_nodes(1),[0,2])
+        self.assertEqual(graph.get_adj_nodes(2),[0,1,5])
+        self.assertEqual(graph.get_adj_nodes(3),[4])
+        self.assertEqual(graph.get_adj_nodes(4),[0,3,5,6])
+        self.assertEqual(graph.get_adj_nodes(5),[4,2])
+        self.assertEqual(graph.get_adj_nodes(6),[4])
+        self.assertEqual(graph.min_number_of_edges(1,5), 2)
+        self.assertEqual(graph.min_number_of_edges(6,1), 3)
+
 if __name__ == '__main__':
     unittest.main()
 
 #TIMING:
 #ex1: 57 min
 #notes: do we assume nodes/data cannot be repeated???, at first I incorrecly assumed the list of adjacent nodes were just the keys instead of the actual nodes themselves
-#ex2: 11:32-11:47
+#ex4: 37 min (with basic test case)
