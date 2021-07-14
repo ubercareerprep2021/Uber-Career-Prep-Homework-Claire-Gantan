@@ -325,6 +325,34 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(graph.min_number_of_edges(1,5), 2)
         self.assertEqual(graph.min_number_of_edges(6,1), 3)
 
+    def test_min_edges_no_edges(self):
+        graph = graph_with_adjacency_list([])
+        graph.add_node(0)
+        graph.add_node(1)
+        graph.add_node(2)
+        self.assertEqual(graph.min_number_of_edges(0,2), -1)
+
+    def test_min_edges_line(self):
+        graph = graph_with_adjacency_list([])
+        graph.add_node(0)
+        graph.add_node(1)
+        graph.add_node(2)
+        graph.add_edge(0,1)
+        graph.add_edge(1,2)
+        self.assertEqual(graph.min_number_of_edges(0,2), 2)
+
+    def test_min_edges_cycle(self):
+        graph = graph_with_adjacency_list([])
+        graph.add_node(0)
+        graph.add_node(1)
+        graph.add_node(2)
+        graph.add_node(3)
+        graph.add_edge(0,1)
+        graph.add_edge(1,2)
+        graph.add_edge(0,2)
+        graph.add_edge(2,3)
+        self.assertEqual(graph.min_number_of_edges(0,3), 2)
+
 if __name__ == '__main__':
     unittest.main()
 
