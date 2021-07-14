@@ -50,6 +50,11 @@ def course_schedule(num_courses, prereq):
     nodes = []
     graph = directed_graph([])
     for arr in prereq:
+        #first enforcing the fact that there are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1
+        if arr[0] > num_courses - 1 or arr[1] > num_courses - 1:
+            return False
+        elif arr[0] < 0 or arr[1] < 0:
+            return False
         if arr[0] not in nodes:
             graph.add_node(arr[0])
         if arr[1] not in nodes:
@@ -83,6 +88,8 @@ class UnitTests(unittest.TestCase):
     def test_course_schedule(self):
         self.assertTrue(course_schedule(2,[[1,0]]))
         self.assertFalse(course_schedule(2,[[1,0],[0,1]]))
+        self.assertTrue(course_schedule(3,[[0,1],[1,2]]))
+        self.assertFalse(course_schedule(2,[[0,1],[1,2]]))
 
 if __name__ == '__main__':
     unittest.main()
