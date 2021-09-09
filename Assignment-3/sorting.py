@@ -27,4 +27,24 @@ print(three_partition_sort([5, 10, 5, 20, 5, 5, 10], 1))
 #Sorting Exercise 3: Sorted Merge
 #You are given two sorted arrays, A and B, where A has a large enough buffer at the
 #end to hold B. Write a method to merge B into A in sorted order in one pass and using O(1) space.
-#def sorted_merge(a, b):
+#start: 5:44
+def sorted_merge(a, b):
+    #a[:] = a[0:len(a)-len(b)] + b[:]
+    #initial approach was to merge both arrays and then sort, but that does not take advantage of the fact that both arrays are already sorted
+
+    ind_a = 0
+    ind_b = 0
+    while ind_a < len(a) - len(b) and ind_b < len(b):
+        if a[ind_a] < b[ind_b]:
+            ind_a += 1
+        elif a[ind_a] > b[ind_b]:
+            #shift over end of a and insert the value from b
+            a[:] = a[0:ind_a] + [b[ind_b]] + a[ind_a:len(a)-1]
+            ind_b += 1
+        else:
+            a[:] = a[0:ind_a] + [b[ind_b]] + a[ind_a:len(a)-1]
+            ind_a += 1
+            ind_b += 1
+    return a
+
+print(sorted_merge([1,2,4,8,0,0,0],[1,3,5]))
