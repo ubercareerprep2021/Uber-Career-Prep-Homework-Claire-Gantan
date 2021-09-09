@@ -1,7 +1,7 @@
 
 #sorting ex 1:Three Partition Sort
 #Given an Array [5, 10, 5, 20, 5, 5, 10], sort them in a single pass.
-#timing: 5:12
+#timing: 25 min
 #was recommended to use the three_partition_sort
 def three_partition_sort(arr, pivot):
     pivot_val = arr[pivot]
@@ -19,6 +19,7 @@ def three_partition_sort(arr, pivot):
     return arr
 
 print(three_partition_sort([5, 10, 5, 20, 5, 5, 10], 1))
+
 #Sorting Exercise 2: External Sort
 #Given a large array containing a million entries, sort them by loading only 100 entries at a time in memory.
 
