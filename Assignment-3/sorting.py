@@ -31,11 +31,15 @@ print(three_partition_sort([5, 10, 5, 20, 5, 5, 10], 1))
 def sorted_merge(a, b):
     #a[:] = a[0:len(a)-len(b)] + b[:]
     #initial approach was to merge both arrays and then sort, but that does not take advantage of the fact that both arrays are already sorted
-
     ind_a = 0
     ind_b = 0
-    while ind_a < len(a) - len(b) and ind_b < len(b):
-        if a[ind_a] < b[ind_b]:
+    while ind_a < len(a) - len(b) or ind_b < len(b):
+        if ind_a >= len(a):
+            a[:] = a[0:ind_a] + [b[ind_b]]
+            ind_b += 1
+        elif ind_b >= len(b):
+            break
+        elif a[ind_a] < b[ind_b]:
             ind_a += 1
         elif a[ind_a] > b[ind_b]:
             #shift over end of a and insert the value from b
@@ -48,3 +52,4 @@ def sorted_merge(a, b):
     return a
 
 print(sorted_merge([1,2,4,8,0,0,0],[1,3,5]))
+print(sorted_merge([1,2,8,0,0,0,0],[1,3,4, 5]))
