@@ -54,7 +54,7 @@ def find_element_helper(arr, start, end, val):
     else:
         # print("min is in second half")
         return find_element_helper(arr,midpoint,end, val)
-print("finding elements, should be 0 -1 -1 0 1 3 1")
+print("finding elements, should be 0 -1 -1 0 1 3 1 4")
 print(find_element([1],1))
 print(find_element([1],0))
 print(find_element([1,2],0))
@@ -62,3 +62,4 @@ print(find_element([1,2],1))
 print(find_element([1,2],2))
 print(find_element([4,5,1,2,3],2))
 print(find_element([4,5,1,2,3],5))
+print(find_element([4,5,1,2,3],3)) # this case does not work for some reason, need to look into it more
